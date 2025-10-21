@@ -1,19 +1,203 @@
-# 🎈 Blank app template
+🇩🇪 Dein Deutschlehrer (Your German Teacher)
 
-A simple Streamlit app template for you to modify!
+This is a cost-free, interactive German A1 language learning application built with Streamlit and the Google Gemini API. It implements a structured, 120-day plan designed for busy learners who can dedicate 30 minutes a day to reach the A1 proficiency level.
 
-[![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://blank-app-template.streamlit.app/)
+The app generates daily grammar explanations, vocabulary lists, and practice quizzes tailored to your progress, with progress tracked persistently using SQLite (or Firestore in deployment).
 
-### How to run it on your own machine
+🚀 Setup and Installation
 
-1. Install the requirements
+Prerequisites
 
-   ```
-   $ pip install -r requirements.txt
-   ```
+Python: Ensure you have Python 3.8+ installed.
 
-2. Run the app
+Packages: Install the required Python libraries:
 
-   ```
-   $ streamlit run streamlit_app.py
-   ```
+pip install streamlit pandas requests
+
+
+Gemini API Key: Obtain a key from the Google AI developer platform.
+
+Running the App
+
+Save: Save the Python code as german_teacher_app.py.
+
+Configuration: Create a directory named .streamlit/ in the same folder. Inside it, create secrets.toml:
+
+# .streamlit/secrets.toml
+gemini_api_key = "YOUR_GENERATED_GEMINI_KEY_HERE"
+
+
+Run: Execute the app from your terminal:
+
+streamlit run german_teacher_app.py
+
+
+📅 The 120-Day Sustainable German A1 Plan
+
+This plan is structured into three phases, requiring approximately 30 minutes of focused study per day to achieve A1 proficiency in four months.
+
+Phase 1: The Basics & Building Blocks (Days 1–40)
+
+Goal: Master the alphabet, basic greetings, personal pronouns, regular verb conjugation, and fundamental sentence structure.
+
+Days
+
+Focus Topic
+
+Grammar & Structure
+
+Vocabulary (Thematic)
+
+1–6
+
+Introduction & Sounds
+
+The German Alphabet (Aussprache), numbers 1–20, basic greetings.
+
+Greetings, farewells, courtesy (e.g., bitte, danke), simple questions.
+
+7–14
+
+Personal Information
+
+Subject Pronouns (ich, du, er, etc.), Verb Conjugation (regular verbs in the present tense, e.g., heißen, kommen).
+
+Countries, languages, professions (e.g., Lehrer, Student).
+
+15–24
+
+Nouns & Articles
+
+The Nominative Case, Gender (der, die, das), Plural forms (start recognizing patterns).
+
+Family members, objects around the house (der Tisch, das Buch).
+
+25–32
+
+The Verb 'Sein' & 'Haben'
+
+Irregular conjugation of sein (to be) and haben (to have). Forming simple statement sentences.
+
+Adjectives for describing state/feeling (e.g., alt, neu, müde, gut).
+
+33–40
+
+The Accusative Case
+
+Definite and Indefinite Articles in Accusative (den, eine, keinen), identifying direct objects.
+
+Food and drink (das Brot, der Kaffee), colors.
+
+Phase 2: Ordering & Directions (Days 41–80)
+
+Goal: Understand prepositions, modal verbs (part 1), simple questions, time, date, and negation.
+
+Days
+
+Focus Topic
+
+Grammar & Structure
+
+Vocabulary (Thematic)
+
+41–48
+
+Negation & Imperative
+
+Negation (nicht and kein/keine), simple Imperative (commands).
+
+Common verbs of movement, everyday tasks (kaufen, machen).
+
+49–56
+
+Modal Verbs (Part 1)
+
+Introduction to können (can) and müssen (must), main verb goes to the end.
+
+Hobbies, abilities, and daily schedules.
+
+57–64
+
+Prepositions of Place
+
+Introduction to simple Prepositions of Place (e.g., in, auf, unter, neben).
+
+Locations (e.g., die Bank, der Park).
+
+65–72
+
+Time and Date
+
+Time (Es ist...), Dates, days of the week, months.
+
+Days, months, seasons, and time expressions (e.g., morgen, gestern).
+
+73–80
+
+Simple Questions
+
+W-Questions (Wer, Was, Wo, Wann, etc.), forming yes/no questions (verb first).
+
+Basic city/travel terms.
+
+Phase 3: Consolidation & Advanced A1 Topics (Days 81–120)
+
+Goal: Consolidate grammar, understand the Dative case basics, and handle common dialogue situations (shopping, travel).
+
+Days
+
+Focus Topic
+
+Grammar & Structure
+
+Vocabulary (Thematic)
+
+81–88
+
+Modal Verbs (Part 2)
+
+Introduction to wollen (want) and mögen (like), review all 4 modals.
+
+Clothing (die Hose, das Hemd), shopping terms (kosten, bezahlen).
+
+89–98
+
+The Dative Case
+
+Dative Articles (dem, der, dem), Dative Prepositions (e.g., mit, nach, von, zu). (Extended period)
+
+Means of transport (der Zug, das Flugzeug), simple prepositions of movement.
+
+99–106
+
+Possessive Pronouns
+
+Possessive Pronouns (mein/meine, dein/deine), correct use according to gender and case (Nominative/Accusative).
+
+Possessions (der Schlüssel, die Tasche).
+
+107–114
+
+Perfect Tense Introduction
+
+Introduction to the Perfect Tense (Perfekt) using haben + Past Participle (for regular verbs).
+
+Verbs related to events (gekauft, gemacht).
+
+115–120
+
+Final Review & Dialogue
+
+Full review of Nominative, Accusative, and Dative articles/pronouns. Review all modal verbs. Practice combining two ideas with und and aber.
+
+Numbers 20–100, common phrases used in restaurants/cafes.
+
+✨ Application Features
+
+Custom Lessons: Explanations and examples are dynamically generated by the Gemini API based on the exact day's topic.
+
+Persistent Progress: Daily completion status is saved locally in the german_progress.db file (SQLite).
+
+Calendar Tracker: The sidebar calendar visually shows your completed (✅) and partially completed (⚠️) study days.
+
+Cost-Free: The app uses the highly efficient Gemini 2.5 Flash model and is configured to operate entirely within the free tier limits.
