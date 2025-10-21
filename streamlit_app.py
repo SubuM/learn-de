@@ -23,19 +23,15 @@ except KeyError:
     GEMINI_API_KEY = "PLACEHOLDER_GEMINI_API_KEY"
 
 # Load Static User Credentials from secrets.toml (for DB initialization)
-try:
-    # This will be a dictionary like {'SMA': 'SecretPassword123', 'AMA': 'AnotherSecretPwd456'}
+if "static_users" in st.secrets:
     STATIC_USERS_DATA = st.secrets["static_users"]
-except KeyError:
-    st.error("FATAL ERROR: Missing '[static_users]' section in secrets.toml.")
+else:
     STATIC_USERS_DATA = {}
 
-# NEW: Load display names from secrets.toml
-try:
-    # This will be a dictionary like {'SMA': 'Sophia M.', 'AMA': 'Alex M.'}
+# Load display names from secrets.toml
+if "user_names" in st.secrets:
     USER_DISPLAY_NAMES = st.secrets["user_names"]
-except KeyError:
-    # Fallback to the username if the section is missing
+else:
     USER_DISPLAY_NAMES = {}
 
 
@@ -387,12 +383,33 @@ def highlight_current_phase(s, current_study_day):
 
     # Check if the current study day falls in this row's range
     if start <= current_study_day <= end:
-        # Highlighted row: Light blue background AND explicitly set text color to black for readability
-        return ['background-color: #E6F3FF; color: #000000'] * len(s) 
+        # HIGHLIGHT FIX: Changed background-color from #E6F3FF (Light Blue) to #AFEEEE (Pale Turquoise)
+        return ['background-color: #AFEEEE; color: #000000'] * len(s) 
     else:
         # Non-highlighted row: Return empty strings to fully defer to the Streamlit theme's default colors
-        # (White text on dark background in dark mode). This ensures visibility.
+        # This ensures visibility in dark mode.
         return [''] * len(s) 
+
+
+# --- NEW FUNCTION: RESET HANDLER ---
+def handle_full_reset(user_id, date_obj):
+    """
+    Performs a full reset: clears LLM cache and deletes the progress record for today.
+    """
+    generate_lesson_content.clear()
+    generate_practice_quiz.clear()
+    
+    # Delete the specific record for the current day and user
+    if user_id:
+        date_str = date_obj.strftime('%Y-%m-%d')
+        conn = sqlite3.connect(DB_NAME)
+        cursor = conn.cursor()
+        # Delete only the current day's record for the logged-in user
+        cursor.execute("DELETE FROM progress WHERE user_id=? AND date_str=?", (user_id, date_str))
+        conn.commit()
+        conn.close()
+        
+    st.rerun()
 
 
 def login_form():
@@ -487,10 +504,9 @@ def main_app_content(current_user_id):
                 st.rerun()
         # ----------------------------------------
 
-        if st.button("Reset Cache & Lesson", help="Clears the generated lesson content and quiz."):
-            generate_lesson_content.clear()
-            generate_practice_quiz.clear()
-            st.rerun()
+        # FIX: Call the new handler function when the Reset button is pressed
+        if st.button("Reset Cache & Lesson", help="Clears the generated lesson content and quiz, and resets today's completion status in the database."):
+            handle_full_reset(current_user_id, current_date_obj)
             
         display_progress_calendar(current_user_id, current_date_obj)
         st.caption("Tracking is based on the **real-world date**.")
@@ -598,7 +614,7 @@ def main_app_content(current_user_id):
         st.markdown("**Goal:** Master the alphabet, basic greetings, personal pronouns, verb conjugation, and fundamental sentence structure.")
         st.dataframe(
             pd.DataFrame(PHASE_1_DATA).style.apply(highlight_current_phase, 
-                                                   current_study_day=current_study_day,
+                                                   current_study_day=current_study_day, 
                                                    axis=1),
             use_container_width=True, 
             hide_index=True
